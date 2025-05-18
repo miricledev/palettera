@@ -2014,7 +2014,7 @@
                 document.getElementById('menuContainer').appendChild(loadingDiv);
 
                 // Load the PDF
-                const pdfUrl = 'menu-paleterra.pdf';
+                const pdfUrl = 'menu-palettera.pdf';
                 pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
                 totalPages = pdfDoc.numPages;
                 
@@ -2186,7 +2186,7 @@
         // In the script section, after DOMContentLoaded, add StPageFlip integration
         // Book-style menu viewer with StPageFlip
         async function initMenuBook() {
-            const pdfUrl = 'menu-paleterra.pdf';
+            const pdfUrl = 'menu-palettera.pdf';
             const bookContainer = document.getElementById('menuBook');
             // Remove any previous content
             bookContainer.innerHTML = '';

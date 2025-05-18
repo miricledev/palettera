@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palettera - Paletería Artesanal en Cartagena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Add PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- Add StPageFlip CSS/JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/stpageflip@2.0.7/dist/stpageflip.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/stpageflip@2.0.7/dist/stpageflip.min.js"></script>
+    <script>
+        // Set PDF.js worker path
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <style>
+        :root {
+            --pink: #D04F9C;
+            --brown: #4B2A18;
+            --light-pink: #F5B6D9;
+            --cream: #FFF9E6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cream);
+            color: var(--brown);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .cursor-paleta {
+            width: 32px;
+            height: 32px;
+            background-image: url('images/mini-paleta.svg');
+            background-size: contain;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Pacifico', cursive;
+            color: var(--pink);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Decorative elements */
+        .sprinkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--pink);
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .swirl {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.2;
+            background-image: url('images/bg-swirls.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-paleta {
+            position: absolute;
+            width: 60px;
+            height: 120px;
+            background-image: url('images/mini-paleta.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: -1;
+            animation: float 8s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--cream) 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-logo {
+            max-width: 250px;
+            margin-bottom: 2rem;
+            animation: float 6s infinite ease-in-out;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            line-height: 1.2;
+            background: linear-gradient(45deg, var(--pink), var(--brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--brown);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .btn-primary {
+            background-color: var(--pink);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(208, 79, 156, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--pink);
+            border: 2px solid var(--pink);
+            padding: 1.2rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(208, 79, 156, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--pink);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .hero-decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-decoration.top-right {
+            top: 10%;
+            right: 5%;
+            width: 200px;
+            height: 200px;
+            background-image: url('images/bg-swirls.png');
+            background-size: contain;
+            opacity: 0.2;
+            animation: rotate 20s linear infinite;
+        }
+
+        .hero-decoration.bottom-left {
+            bottom: 10%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            background-image: url('images/bg-swirls.png');
+            background-size: contain;
+            opacity: 0.2;
+            animation: rotate 20s linear infinite reverse;
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1s forwards;
+        }
+
+        .scroll-text {
+            color: var(--brown);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--pink);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-arrow::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid var(--pink);
+            border-bottom: 2px solid var(--pink);
+            transform: rotate(45deg);
+            margin-top: -4px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Paletas Section */
+        .paletas {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--pink);
+        }
+
+        .paletas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .paleta-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            height: 350px;
+        }
+
+        .paleta-card:hover {
+            transform: translateY(-10px) rotateY(10deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .paleta-front, .paleta-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+
+        .paleta-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            background-color: var(--light-pink);
+        }
+
+        .paleta-card:hover .paleta-front {
+            transform: rotateY(-180deg);
+        }
+
+        .paleta-card:hover .paleta-back {
+            transform: rotateY(0);
+        }
+
+        .paleta-img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+        }
+
+        .paleta-front-content {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .paleta-name {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--pink);
+        }
+
+        .paleta-price {
+            font-weight: bold;
+            color: var(--brown);
+        }
+
+        .paleta-desc {
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 0;
+            background-color: white;
+            position: relative;
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .paleta-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .paleta-icon {
+            width: 60px;
+            height: 120px;
+            margin: 0 1rem;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .paleta-icon:hover {
+            transform: translateY(-10px);
+        }
+
+        .paleta-icon.melting {
+            animation: melt 1s forwards;
+        }
+
+        @keyframes melt {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px) scaleY(0.5); opacity: 0.5; }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1.5rem;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        /* Make the colombia.png (third feature) more rounded and wider */
+        .features-grid .feature:nth-child(3) .feature-icon {
+            border-radius: 40px 40px 40px 40px / 28px 28px 28px 28px;
+            width: 130px;
+            height: 90px;
+            object-fit: cover;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(208, 79, 156, 0.08);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Instagram Section */
+        .instagram {
+            padding: 6rem 0;
+            background-color: white;
+            position: relative;
+        }
+
+        .instagram-slider {
+            margin-top: 3rem;
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .instagram-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .instagram-slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .instagram-post {
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .instagram-post img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .instagram-post:hover img {
+            transform: scale(1.1);
+        }
+
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--light-pink);
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background-color: var(--pink);
+            transform: scale(1.3);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .contact-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .contact-whatsapp {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            background-color: #25D366;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .whatsapp-btn svg {
+            margin-right: 0.5rem;
+        }
+
+        .contact-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--pink);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 2px solid var(--light-pink);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(208, 79, 156, 0.2);
+        }
+
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--pink);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--pink);
+            color: white;
+            padding: 4rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+        }
+
+        .footer-info {
+            max-width: 300px;
+        }
+
+        .footer-info h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .footer-info p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            color: var(--pink);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .footer-hours {
+            max-width: 300px;
+        }
+
+        .footer-hours h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .hours-list {
+            list-style: none;
+        }
+
+        .hours-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .developer-credit {
+            background-color: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .developer-credit h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .developer-credit p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .developer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .developer-link:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+        }
+
+        .purple-heart {
+            color: #9b59b6;
+            font-size: 1.2rem;
+        }
+
+        .footer-swirl {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.2;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .paletas-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .instagram-post {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .footer-info, .footer-hours {
+                max-width: 100%;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .paleta-card {
+                height: 300px;
+            }
+            
+            .instagram-post {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 5px;
+            background-color: var(--pink);
+            width: 0%;
+        }
+
+        .floating-buttons {
+            position: fixed;
+            bottom: 2rem;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .floating-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            position: relative;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .floating-button.whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+
+        .floating-button.email {
+            background-color: var(--pink);
+            color: white;
+        }
+
+        .floating-button svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .floating-button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .floating-button:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .floating-buttons {
+                padding: 0 1rem;
+            }
+
+            .floating-button {
+                width: 50px;
+                height: 50px;
+            }
+
+            .floating-button svg {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        /* Menu Section Styles */
+        .menu {
+            padding: 6rem 0;
+            background-color: var(--cream);
+            position: relative;
+        }
+
+        .menu-viewer {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .menu-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .menu-nav-btn {
+            background-color: var(--pink);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(208, 79, 156, 0.3);
+        }
+
+        .menu-nav-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .page-info {
+            font-size: 1.2rem;
+            color: var(--brown);
+            font-weight: 600;
+        }
+
+        .menu-pages {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        #menuContainer {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-page.active {
+            opacity: 1;
+        }
+
+        .menu-page canvas {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .menu-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            color: var(--brown);
+        }
+
+        .menu-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #dc3545;
+            padding: 1rem;
+        }
+
+        .menu-zoom-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .zoom-btn {
+            background-color: var(--light-pink);
+            color: var(--brown);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .zoom-btn:hover {
+            background-color: var(--pink);
+            color: white;
+        }
+
+        .zoom-level {
+            font-size: 1rem;
+            color: var(--brown);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .menu-viewer {
+                padding: 1rem;
+            }
+            
+            .menu-pages {
+                min-height: 400px;
+            }
+            
+            .menu-controls {
+                gap: 1rem;
+            }
+            
+            .menu-nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Gallery Section Styles */
+        .gallery {
+            padding: 6rem 0;
+            background-color: var(--cream);
+            position: relative;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-auto-rows: 130px;
+            gap: 1.2rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(208, 79, 156, 0.10), 0 1.5px 6px rgba(75, 42, 24, 0.08);
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
+            background: white;
+            grid-column: span 1;
+            grid-row: span 1;
+        }
+
+        /* Make some images larger for a creative layout */
+        .gallery-img:nth-child(2),
+        .gallery-img:nth-child(5),
+        .gallery-img:nth-child(8) {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .gallery-img:hover {
+            transform: scale(1.06) rotate(-2deg);
+            box-shadow: 0 8px 32px rgba(208, 79, 156, 0.18), 0 3px 12px rgba(75, 42, 24, 0.12);
+            z-index: 2;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(208, 79, 156, 0.18), 0 3px 12px rgba(75, 42, 24, 0.12);
+            background: white;
+        }
+
+        .lightbox-close {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            position: absolute;
+            top: 2rem;
+            right: 3rem;
+            cursor: pointer;
+            z-index: 2100;
+            transition: color 0.2s;
+        }
+
+        .lightbox-close:hover {
+            color: var(--pink);
+        }
+
+        @media (max-width: 900px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+                grid-auto-rows: 90px;
+            }
+        }
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-auto-rows: 60px;
+                gap: 0.3rem;
+            }
+            .gallery-img:nth-child(2),
+            .gallery-img:nth-child(5),
+            .gallery-img:nth-child(8) {
+                grid-column: span 2;
+                grid-row: span 2;
+            }
+            .lightbox-img {
+                max-width: 98vw;
+                max-height: 60vh;
+            }
+            .lightbox-close {
+                top: 1rem;
+                right: 1.5rem;
+            }
+        }
+
+        /* Add photo frame styles */
+        .photo-frame {
+            background: linear-gradient(135deg, #fff9e6 60%, #f5b6d9 100%);
+            border: 6px solid #fff;
+            border-radius: 28px;
+            box-shadow: 0 6px 24px rgba(208, 79, 156, 0.10), 0 2px 8px rgba(75, 42, 24, 0.10);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: box-shadow 0.3s, transform 0.3s;
+            position: relative;
+            height: 100%;
+        }
+        .photo-frame:hover {
+            box-shadow: 0 12px 36px rgba(208, 79, 156, 0.18), 0 4px 16px rgba(75, 42, 24, 0.14);
+            transform: scale(1.03) rotate(-1deg);
+            z-index: 3;
+        }
+
+        /* Add gallery frame styles */
+        .gallery-frame {
+            background: linear-gradient(135deg, #fff9e6 60%, #f5b6d9 100%);
+            border: 10px solid #fff;
+            border-radius: 38px;
+            box-shadow: 0 12px 48px rgba(208, 79, 156, 0.13), 0 4px 16px rgba(75, 42, 24, 0.13);
+            padding: 2.5rem 2rem;
+            margin: 0 auto 3rem auto;
+            max-width: 1100px;
+            transition: box-shadow 0.3s, transform 0.3s;
+            position: relative;
+        }
+        .gallery-frame:hover {
+            box-shadow: 0 20px 64px rgba(208, 79, 156, 0.18), 0 8px 32px rgba(75, 42, 24, 0.16);
+            transform: scale(1.01) rotate(-0.5deg);
+            z-index: 3;
+        }
+
+        /* Add map styles */
+        .contact-map-container {
+            width: 100%;
+            margin: 2.5rem 0 0 0;
+            display: flex;
+            justify-content: center;
+        }
+        .contact-map {
+            width: 100%;
+            max-width: 600px;
+            height: 320px;
+            border: 0;
+            border-radius: 22px;
+            box-shadow: 0 4px 18px rgba(208, 79, 156, 0.10), 0 1.5px 6px rgba(75, 42, 24, 0.08);
+        }
+        @media (max-width: 900px) {
+            .contact-map {
+                max-width: 100%;
+                height: 220px;
+            }
+        }
+
+        /* Add floating button color for location and menu */
+        .floating-button.location {
+            background-color: #8e44ad;
+            color: white;
+        }
+        .floating-button.menu {
+            background-color: var(--brown);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .floating-button.location:hover {
+            background-color: #a569bd;
+        }
+        .floating-button.menu:hover {
+            background-color: #6e2c00;
+        }
+
+        /* Add floating menu top left styles */
+        .floating-menu-top {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 1200;
+            background: var(--brown);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.7em 1.5em 0.7em 1.1em;
+            font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 4px 18px rgba(208, 79, 156, 0.10), 0 1.5px 6px rgba(75, 42, 24, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+        .floating-menu-top:hover {
+            background: #6e2c00;
+            box-shadow: 0 8px 32px rgba(208, 79, 156, 0.18), 0 3px 12px rgba(75, 42, 24, 0.12);
+            transform: scale(1.04) rotate(-2deg);
+        }
+        @media (max-width: 600px) {
+            .floating-menu-top {
+                top: 1rem;
+                left: 1rem;
+                font-size: 0.95rem;
+                padding: 0.5em 1em 0.5em 0.8em;
+            }
+        }
+
+        /* Add MiricleDev credit badge styles */
+        .miricledev-credit {
+            position: fixed;
+            top: 1.2rem;
+            right: 1.2rem;
+            z-index: 1200;
+            background: rgba(255,255,255,0.85);
+            color: #9b59b6;
+            font-size: 0.95rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            padding: 0.45em 1.1em;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(208, 79, 156, 0.08);
+            text-decoration: none;
+            opacity: 0.85;
+            transition: opacity 0.2s, box-shadow 0.2s, background 0.2s;
+            letter-spacing: 0.01em;
+        }
+        .miricledev-credit:hover {
+            opacity: 1;
+            background: #f5b6d9;
+            color: #4B2A18;
+            box-shadow: 0 4px 16px rgba(208, 79, 156, 0.13);
+        }
+        @media (max-width: 600px) {
+            .miricledev-credit {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.82rem;
+                padding: 0.3em 0.7em;
+            }
+        }
+
+        /* Instagram Button Styles */
+        .instagram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+            background: linear-gradient(90deg, #f9ce34 0%, #ee2a7b 60%, #6228d7 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1.15rem;
+            border: none;
+            border-radius: 30px;
+            padding: 0.9em 2.1em;
+            box-shadow: 0 4px 18px rgba(208, 79, 156, 0.10);
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .instagram-btn:hover {
+            background: linear-gradient(90deg, #ee2a7b 0%, #6228d7 100%);
+            color: #fff9e6;
+            box-shadow: 0 8px 32px rgba(208, 79, 156, 0.18);
+            transform: scale(1.04) rotate(-2deg);
+        }
+        .instagram-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .instagram-btn-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        /* Add StPageFlip custom styles */
+        #menuBook {
+            min-height: 600px;
+            margin-top: 3rem;
+        }
+        @media (max-width: 900px) {
+            #menuBook {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-paleta"></div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-decoration top-right"></div>
+        <div class="hero-decoration bottom-left"></div>
+        
+        <div class="hero-content">
+            <img src="images/logo.jpg" alt="Palettera Logo" class="hero-logo">
+            <h1>Un helado con historia – Palettera Cartagena</h1>
+            <p class="hero-subtitle">Descubre el sabor auténtico de Colombia en cada paleta artesanal</p>
+            
+            <div class="hero-buttons">
+                <button class="btn-primary" id="menuBtn">Ver nuestro menú</button>
+                <button class="btn-secondary" id="contactBtn">Contáctanos</button>
+            </div>
+        </div>
+
+        <div class="hero-scroll-indicator">
+            <span class="scroll-text">Descubre más</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+ 
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title fade-in">Sobre Palettera</h2>
+            <div class="about-content fade-in">
+                <p class="about-text">
+                    Nacimos en las calles coloridas de Cartagena con una pasión: crear las mejores paletas artesanales de Colombia. Cada paleta cuenta una historia, cada sabor refleja nuestras raíces caribeñas y andinas. En Palettera, no solo elaboramos helados; creamos experiencias que despiertan recuerdos y sonrisas.
+                </p>
+                <p class="about-text">
+                    Nuestro compromiso es con los ingredientes frescos y locales, las recetas tradicionales y la innovación constante. Cada día nos levantamos con la misión de refrescar Cartagena, una paleta a la vez.
+                </p>
+                <div class="paleta-icons">
+                    <div class="paleta-icon" style="background-image: url('images/paleta-icon1.svg');"></div>
+                    <div class="paleta-icon" style="background-image: url('images/paleta-icon2.svg');"></div>
+                    <div class="paleta-icon" style="background-image: url('images/paleta-icon3.svg');"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="galeria">
+        <div class="container">
+            <h2 class="section-title fade-in">Galería</h2>
+            <div class="gallery-frame fade-in">
+                <div class="gallery-grid">
+                    <img src="images/1000010088.jpg" alt="Galería 1" class="gallery-img">
+                    <img src="images/1000010110.jpg" alt="Galería 2" class="gallery-img">
+                    <img src="images/1000010122.jpg" alt="Galería 3" class="gallery-img">
+                    <img src="images/1000010103.jpg" alt="Galería 4" class="gallery-img">
+                    <img src="images/1000010126.jpg" alt="Galería 5" class="gallery-img">
+                    <img src="images/1000010130.jpg" alt="Galería 6" class="gallery-img">
+                    <img src="images/1000010086.jpg" alt="Galería 7" class="gallery-img">
+                    <img src="images/1000010118.jpg" alt="Galería 8" class="gallery-img">
+                    <img src="images/1000010093.jpg" alt="Galería 9" class="gallery-img">
+                    <img src="images/1000010114.jpg" alt="Galería 10" class="gallery-img">
+                    <img src="images/1000010090.jpg" alt="Galería 11" class="gallery-img">
+                    <img src="images/1000010100.jpg" alt="Galería 12" class="gallery-img">
+                </div>
+            </div>
+        </div>
+        <!-- Lightbox Overlay -->
+        <div class="lightbox" id="lightbox">
+            <span class="lightbox-close" id="lightboxClose">&times;</span>
+            <img class="lightbox-img" id="lightboxImg" src="" alt="Imagen ampliada">
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <h2 class="section-title fade-in">Nuestro Menú</h2>
+            <!-- Book-style menu viewer -->
+            <div id="menuBook" class="fade-in" style="width:100%;max-width:900px;margin:0 auto;"></div>
+            <!-- Hide old menu viewer for now -->
+            <div class="menu-viewer fade-in" style="display:none;">
+                <div class="menu-controls">
+                    <button class="menu-nav-btn prev-btn" onclick="prevPage()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">0</span></span>
+                    <button class="menu-nav-btn next-btn" onclick="nextPage()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="menu-pages">
+                    <div id="menuContainer"></div>
+                </div>
+                <div class="menu-zoom-controls">
+                    <button class="zoom-btn" onclick="zoomOut()">-</button>
+                    <span class="zoom-level">100%</span>
+                    <button class="zoom-btn" onclick="zoomIn()">+</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title fade-in">¿Por Qué Somos Especiales?</h2>
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature fade-in">
+                    <img src="images/artesanal.png" alt="Ícono Artesanal" class="feature-icon">
+                    <h3>100% Artesanal</h3>
+                    <p>Cada paleta es elaborada a mano con técnicas tradicionales y recetas que han pasado de generación en generación. Ninguna paleta es exactamente igual a otra, ¡cada una es una obra de arte!</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature fade-in">
+                    <img src="images/ingredientes.png" alt="Ícono Ingredientes Frescos" class="feature-icon">
+                    <h3>Ingredientes Frescos</h3>
+                    <p>Seleccionamos las mejores frutas y ingredientes de mercados locales y productores de confianza. De la finca a la paleta, garantizamos frescura y sabor en cada bocado.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature fade-in">
+                    <img src="images/colombia.png" alt="Ícono Colombia" class="feature-icon">
+                    <h3>Sabores de Colombia</h3>
+                    <p>Nuestras paletas celebran la riqueza y diversidad de Colombia. Desde el maracuyá del Caribe hasta el café de los Andes, cada sabor es un viaje por nuestro hermoso país.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Section -->
+    <section class="instagram" id="instagram">
+        <div class="container">
+            <h2 class="section-title fade-in">Síguenos en Instagram</h2>
+            <div class="instagram-slider fade-in">
+                <div class="instagram-track">
+                    <!-- Slide 1 -->
+                    <div class="instagram-slide">
+                        <div class="instagram-post">
+                            <img src="images/1000010088.jpg" alt="Menú 1">
+                        </div>
+                        <div class="instagram-post">
+                            <img src="images/1000010110.jpg" alt="Menú 2">
+                        </div>
+                        <div class="instagram-post">
+                            <img src="images/1000010122.jpg" alt="Menú 3">
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="instagram-slide">
+                        <div class="instagram-post">
+                            <img src="images/1000010103.jpg" alt="Menú 4">
+                        </div>
+                        <div class="instagram-post">
+                            <img src="images/1000010126.jpg" alt="Menú 5">
+                        </div>
+                        <div class="instagram-post">
+                            <img src="images/1000010130.jpg" alt="Menú 6">
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-nav">
+                    <div class="slider-dot active"></div>
+                    <div class="slider-dot"></div>
+                </div>
+            </div>
+            <div class="text-center fade-in" style="text-align: center; margin-top: 2rem;">
+                <a href="https://www.instagram.com/paletteractg/" target="_blank" class="instagram-btn">
+                    <span class="instagram-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="7" fill="url(#ig-gradient)"/><defs><linearGradient id="ig-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#f9ce34"/><stop offset="0.5" stop-color="#ee2a7b"/><stop offset="1" stop-color="#6228d7"/></linearGradient></defs><path d="M12 7.2A4.8 4.8 0 1 0 12 16.8A4.8 4.8 0 1 0 12 7.2Z" fill="white"/><circle cx="17.5" cy="6.5" r="1.5" fill="white"/></svg>
+                    </span>
+                    <span class="instagram-btn-text">Síguenos @paletteractg</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title fade-in">¿Quieres hablar con nosotros?</h2>
+            <div class="contact-options">
+                <div class="contact-whatsapp fade-in">
+                    <h3 style="margin-bottom: 1.5rem;">Escríbenos por WhatsApp</h3>
+                    <div class="whatsapp-buttons" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                        <a href="https://wa.me/573014682741" class="whatsapp-btn" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            +57 301 468 2741
+                        </a>
+                        <a href="https://wa.me/573176984865" class="whatsapp-btn" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            +57 317 698 4865
+                        </a>
+                    </div>
+                    <div class="contact-map-container fade-in">
+                        <iframe class="contact-map" src="https://www.google.com/maps?q=San+Fernando,+Cra.+81+%2322-19,+Cartagena,+Bolívar,+Colombia&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+
+                <div class="contact-form fade-in">
+                    <form action="https://formsubmit.co/paletteracartagena@gmail.com" method="POST">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Mensaje</label>
+                            <textarea id="message" name="message" class="form-input" required></textarea>
+                        </div>
+                        <!-- Honeypot -->
+                        <input type="text" name="_honey" style="display:none">
+                        <!-- Disable Captcha -->
+                        <input type="hidden" name="_captcha" value="false">
+                        <!-- Success Page -->
+                        <input type="hidden" name="_next" value="https://palettera.co/gracias.html">
+                        <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-swirl" style="top: 10%; left: 5%; background-image: url('images/bg-swirls.png');"></div>
+        <div class="footer-swirl" style="bottom: 20%; right: 5%; background-image: url('images/bg-swirls.png');"></div>
+        
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <img src="images/logo.jpg" alt="Palettera Logo" class="footer-logo">
+                    <p>San Fernando, crra 81 #22-19</p>
+                    <p>Cartagena de Indias, Colombia</p>
+                    <p>Tel: +57 301 468 2741</p>
+                    <p>Tel: +57 317 698 4865</p>
+                    <p>Email: paletteracartagena@gmail.com</p>
+                    <p>Abierto desde: 2 de abril 2025</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/paletteractg/" class="social-link" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#D04F9C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-hours">
+                    <h3>Horarios</h3>
+                    <ul class="hours-list">
+                        <li><span>Lunes - Sábado:</span> <span>10:00 - 22:00</span></li>
+                        <li><span>Domingo:</span> <span>Cerrado</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Palettera - Todos los derechos reservados</p>
+                
+                <div class="developer-credit">
+                    <h4>Desarrollado con <span class="purple-heart">♥</span> por MiricleDev</h4>
+                    <p>¿Necesitas un sitio web profesional, una aplicación móvil o un sistema administrativo personalizado?</p>
+                    <p>Somos un equipo de desarrollo freelance especializado en crear soluciones digitales a medida para tu negocio.</p>
+                    <a href="https://miricledev.github.io/md-landing-page/" target="_blank" class="developer-link">
+                        Conoce más sobre nuestros servicios
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <div style="display: flex; gap: 1rem;">
+            <a href="https://wa.me/573014682741" target="_blank" class="floating-button whatsapp" data-tooltip="¡Escríbenos por WhatsApp!">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+            </a>
+            <button class="floating-button location" data-tooltip="Ver ubicación" onclick="scrollToMap()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+            </button>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <button class="floating-button email" data-tooltip="Envíanos un mensaje" onclick="scrollToContact()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <!-- Floating Menu Button Top Left -->
+    <button class="floating-menu-top" onclick="scrollToMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 22px; height: 22px; margin-right: 0.5em;">
+            <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+        </svg>
+        <span>Ver menú</span>
+    </button>
+    <!-- MiricleDev Credit Badge Top Right -->
+    <a href="https://miricledev.github.io/md-landing-page/" class="miricledev-credit" target="_blank" rel="noopener" title="Sitio creado por MiricleDev">Creado por MiricleDev</a>
+
+    <script>
+        // Dynamic decorative elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create sprinkles
+            for (let i = 0; i < 30; i++) {
+                createSprinkle();
+            }
+            
+            // Create floating paletas
+            for (let i = 0; i < 8; i++) {
+                createFloatingPaleta();
+            }
+            
+            // Create swirls
+            for (let i = 0; i < 6; i++) {
+                createSwirl();
+            }
+            
+            // Initialize fade-in animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('appear');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // Scroll to menu section when clicking the button
+            document.getElementById('menuBtn').addEventListener('click', function() {
+                document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Paleta icons melting effect
+            const paletaIcons = document.querySelectorAll('.paleta-icon');
+            paletaIcons.forEach(icon => {
+                icon.addEventListener('click', function() {
+                    this.classList.add('melting');
+                    setTimeout(() => {
+                        this.classList.remove('melting');
+                    }, 1000);
+                });
+            });
+            
+            // Instagram slider functionality
+            const sliderTrack = document.querySelector('.instagram-track');
+            const slides = document.querySelectorAll('.instagram-slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            let currentSlide = 0;
+            
+            function goToSlide(n) {
+                sliderTrack.style.transform = `translateX(-${n * 100}%)`;
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === n);
+                });
+                currentSlide = n;
+            }
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => goToSlide(index));
+            });
+            
+            // Auto-slide
+            setInterval(() => {
+                const next = (currentSlide + 1) % slides.length;
+                goToSlide(next);
+            }, 5000);
+            
+            // Contact form submission animation
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const btn = this.querySelector('.submit-btn');
+                    const originalText = btn.textContent;
+                    
+                    btn.textContent = '¡Mensaje Enviado!';
+                    btn.style.backgroundColor = '#25D366';
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.backgroundColor = '';
+                        contactForm.reset();
+                    }, 3000);
+                });
+            }
+            
+            // Scroll progress bar
+            window.addEventListener('scroll', function() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('progressBar').style.width = scrolled + '%';
+            });
+            
+            // Custom cursor
+            const cursor = document.querySelector('.cursor-paleta');
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursor.style.opacity = '1';
+            });
+            
+            document.addEventListener('mouseout', () => {
+                cursor.style.opacity = '0';
+            });
+            
+            // Better hover effect for buttons and links
+            const hoverElements = document.querySelectorAll('.btn, .paleta-card, .feature, .instagram-post, .whatsapp-btn, .social-link');
+            hoverElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1.5) rotate(15deg)';
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+                });
+            });
+        });
+        
+        // Helper functions for decorative elements
+        function createSprinkle() {
+            const sprinkle = document.createElement('div');
+            sprinkle.classList.add('sprinkle');
+            
+            // Random position
+            sprinkle.style.left = Math.random() * 100 + 'vw';
+            sprinkle.style.top = Math.random() * 300 + 'vh';
+            
+            // Random size
+            const size = Math.random() * 8 + 5;
+            sprinkle.style.width = size + 'px';
+            sprinkle.style.height = size + 'px';
+            
+            // Random color
+            const colors = ['#D04F9C', '#4B2A18', '#F5B6D9'];
+            sprinkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            document.body.appendChild(sprinkle);
+        }
+        
+        function createFloatingPaleta() {
+            const paleta = document.createElement('div');
+            paleta.classList.add('floating-paleta');
+            
+            // Random position
+            paleta.style.left = Math.random() * 100 + 'vw';
+            paleta.style.top = Math.random() * 300 + 'vh';
+            
+            // Random animation delay
+            paleta.style.animationDelay = Math.random() * 5 + 's';
+            
+            document.body.appendChild(paleta);
+        }
+        
+        function createSwirl() {
+            const swirl = document.createElement('div');
+            swirl.classList.add('swirl');
+            
+            // Random position
+            swirl.style.left = Math.random() * 100 + 'vw';
+            swirl.style.top = Math.random() * 300 + 'vh';
+            
+            // Random rotation
+            swirl.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            document.body.appendChild(swirl);
+        }
+
+        // Hero section scroll indicator
+        document.querySelector('.hero-scroll-indicator').addEventListener('click', function() {
+            document.getElementById('paletas').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Contact button functionality
+        document.getElementById('contactBtn').addEventListener('click', function() {
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Scroll to contact form
+        function scrollToContact() {
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Menu Viewer Functions
+        let currentZoom = 100;
+        let currentPage = 1;
+        let totalPages = 0;
+        let pdfDoc = null;
+        let pageCache = {};
+
+        async function initMenuViewer() {
+            try {
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'menu-loading';
+                loadingDiv.textContent = 'Cargando menú...';
+                document.getElementById('menuContainer').appendChild(loadingDiv);
+
+                // Load the PDF
+                const pdfUrl = 'menu-paleterra.pdf';
+                pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+                totalPages = pdfDoc.numPages;
+                
+                // Update total pages display
+                document.getElementById('totalPages').textContent = totalPages;
+                
+                // Remove loading message
+                loadingDiv.remove();
+                
+                // Load first page
+                await loadPage(1);
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'menu-error';
+                errorDiv.textContent = 'Error al cargar el menú. Por favor, intente nuevamente.';
+                document.getElementById('menuContainer').appendChild(errorDiv);
+            }
+        }
+
+        async function loadPage(pageNumber) {
+            try {
+                // Check if page is already cached
+                if (pageCache[pageNumber]) {
+                    showPage(pageNumber);
+                    return;
+                }
+
+                // Get the page
+                const page = await pdfDoc.getPage(pageNumber);
+                
+                // Create canvas for the page
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                // Calculate scale to fit the container
+                const container = document.getElementById('menuContainer');
+                const containerWidth = container.clientWidth;
+                const containerHeight = container.clientHeight;
+                
+                const viewport = page.getViewport({ scale: 1 });
+                const scale = Math.min(
+                    containerWidth / viewport.width,
+                    containerHeight / viewport.height
+                );
+                
+                // Apply zoom
+                const zoomedScale = scale * (currentZoom / 100);
+                const zoomedViewport = page.getViewport({ scale: zoomedScale });
+                
+                // Set canvas dimensions
+                canvas.width = zoomedViewport.width;
+                canvas.height = zoomedViewport.height;
+                
+                // Render PDF page
+                await page.render({
+                    canvasContext: context,
+                    viewport: zoomedViewport
+                }).promise;
+                
+                // Cache the rendered page
+                pageCache[pageNumber] = canvas;
+                
+                // Show the page
+                showPage(pageNumber);
+            } catch (error) {
+                console.error('Error rendering page:', error);
+            }
+        }
+
+        function showPage(pageNumber) {
+            // Remove all existing pages
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = '';
+            
+            // Add the requested page
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'menu-page active';
+            pageDiv.appendChild(pageCache[pageNumber]);
+            container.appendChild(pageDiv);
+            
+            // Update current page display
+            currentPage = pageNumber;
+            document.getElementById('currentPage').textContent = pageNumber;
+        }
+
+        async function nextPage() {
+            if (currentPage < totalPages) {
+                await loadPage(currentPage + 1);
+            }
+        }
+
+        async function prevPage() {
+            if (currentPage > 1) {
+                await loadPage(currentPage - 1);
+            }
+        }
+
+        function updatePageDisplay() {
+            document.getElementById('currentPage').textContent = currentPage;
+        }
+
+        async function zoomIn() {
+            if (currentZoom < 200) {
+                currentZoom += 10;
+                await updateZoom();
+            }
+        }
+
+        async function zoomOut() {
+            if (currentZoom > 50) {
+                currentZoom -= 10;
+                await updateZoom();
+            }
+        }
+
+        async function updateZoom() {
+            document.querySelector('.zoom-level').textContent = `${currentZoom}%`;
+            // Reload current page with new zoom
+            await loadPage(currentPage);
+        }
+
+        // Initialize menu viewer when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... existing DOMContentLoaded code ...
+            
+            // Initialize menu viewer
+            initMenuViewer();
+        });
+
+        // Gallery Lightbox Functionality
+        const galleryImages = document.querySelectorAll('.gallery-grid .gallery-img');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        galleryImages.forEach(img => {
+            img.addEventListener('click', () => {
+                lightbox.classList.add('active');
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+            });
+        });
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            lightboxImg.src = '';
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                lightboxImg.src = '';
+            }
+        });
+
+        // Add scroll functions for map and menu
+        function scrollToMap() {
+            // Scroll to the map in the contact section
+            const map = document.querySelector('.contact-map-container');
+            if (map) map.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function scrollToMenu() {
+            // Scroll to the menu section
+            const menu = document.getElementById('menu');
+            if (menu) menu.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // In the script section, after DOMContentLoaded, add StPageFlip integration
+        // Book-style menu viewer with StPageFlip
+        async function initMenuBook() {
+            const pdfUrl = 'menu-paleterra.pdf';
+            const bookContainer = document.getElementById('menuBook');
+            // Remove any previous content
+            bookContainer.innerHTML = '';
+            // Load PDF
+            let pdfDoc;
+            try {
+                pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+            } catch (e) {
+                bookContainer.innerHTML = '<div style="color:#D04F9C;text-align:center;padding:2em;">No se pudo cargar el menú.</div>';
+                return;
+            }
+            // Render all pages to images
+            const pageImages = [];
+            for (let i = 1; i <= pdfDoc.numPages; i++) {
+                const page = await pdfDoc.getPage(i);
+                const viewport = page.getViewport({ scale: 2 });
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+                pageImages.push(canvas.toDataURL());
+            }
+            // Prepare StPageFlip pages: first is single, then pairs
+            const flipPages = [];
+            if (pageImages.length > 0) {
+                flipPages.push({ src: pageImages[0] }); // cover
+                for (let i = 1; i < pageImages.length; i += 2) {
+                    if (i + 1 < pageImages.length) {
+                        flipPages.push([{ src: pageImages[i] }, { src: pageImages[i + 1] }]);
+                    } else {
+                        flipPages.push([{ src: pageImages[i] }]);
+                    }
+                }
+            }
+            // Initialize StPageFlip
+            const pageFlip = new St.PageFlip(bookContainer, {
+                width: 420,
+                height: 600,
+                size: 'stretch',
+                minWidth: 320,
+                minHeight: 400,
+                maxWidth: 1200,
+                maxHeight: 1600,
+                showCover: true,
+                mobileScrollSupport: true,
+                usePortrait: false,
+                startPage: 0,
+                maxShadowOpacity: 0.3,
+                animationDuration: 800
+            });
+            // Add pages
+            pageFlip.loadFromImages(pageImages);
+        }
+
+        // On DOMContentLoaded, initialize the book viewer
+        document.addEventListener('DOMContentLoaded', function() {
+            initMenuBook();
+        });
+    </script>
+</body>
+</html>

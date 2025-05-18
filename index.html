@@ -1083,6 +1083,7 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+            touch-action: pan-y pinch-zoom;
         }
 
         #menuContainer {
@@ -1098,21 +1099,18 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            object-fit: contain;
             opacity: 0;
             transition: opacity 0.3s ease;
+            display: none;
+            max-width: 100%;
+            max-height: 100%;
+            padding: 20px;
         }
 
         .menu-page.active {
             opacity: 1;
-        }
-
-        .menu-page canvas {
-            max-width: 100%;
-            max-height: 100%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: block;
         }
 
         .menu-loading {
@@ -1491,6 +1489,353 @@
                 min-height: 400px;
             }
         }
+
+        /* Loading indicator styles */
+        .menu-loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            border: 4px solid var(--light-pink);
+            border-top: 4px solid var(--pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Touch swipe styles */
+        .menu-pages.swiping {
+            cursor: grabbing;
+        }
+
+        .menu-pages.swiping .menu-page {
+            transition: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .menu-pages {
+                min-height: 400px;
+            }
+            
+            .menu-page {
+                padding: 10px;
+            }
+        }
+
+        /* Book styles */
+        .book-container {
+            perspective: 2000px;
+            margin: 2rem auto;
+            width: 100%;
+            max-width: 1000px;
+            height: 600px;
+            position: relative;
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform-origin: center;
+        }
+
+        .page {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            transform-origin: left center;
+            transition: transform 0.8s ease-in-out;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+        }
+
+        .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 20px;
+        }
+
+        .page.cover {
+            width: 100%;
+            transform-origin: center;
+        }
+
+        .page.right {
+            transform-origin: right center;
+        }
+
+        /* Page positions */
+        #page1 { z-index: 6; }
+        #page2 { z-index: 5; left: 0; }
+        #page3 { z-index: 4; left: 0; }
+        #page4 { z-index: 3; left: 0; }
+        #page5 { z-index: 2; left: 0; }
+        #page6 { z-index: 1; left: 0; }
+
+        /* Page states */
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .page.right.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* Menu controls */
+        .menu-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .menu-nav-btn {
+            background-color: var(--pink);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(208, 79, 156, 0.3);
+        }
+
+        .page-info {
+            font-size: 1.2rem;
+            color: var(--brown);
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .book-container {
+                height: 400px;
+            }
+            
+            .page img {
+                padding: 10px;
+            }
+            
+            .menu-controls {
+                gap: 1rem;
+            }
+            
+            .menu-nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Menu styles */
+        .menu-container {
+            background-color: #f5f5f5;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 3rem;
+            perspective: 2000px;
+        }
+
+        .menu-pages {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0d8c8;
+            border-radius: 10px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .menu-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .menu-page.active {
+            display: flex;
+            z-index: 2;
+        }
+
+        .menu-page.previous {
+            transform: rotateY(-180deg);
+            z-index: 1;
+        }
+
+        .menu-page.next {
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+
+        .page-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            background-image: linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(0deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .page-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .page-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Spread pages layout */
+        .page-content.spread {
+            display: flex;
+            gap: 0;
+            background: #fff;
+            background-image: linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              linear-gradient(0deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .page-content.spread::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(0,0,0,0.1) 0%,
+                rgba(0,0,0,0.05) 50%,
+                rgba(0,0,0,0.1) 100%);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        .page-content.spread img {
+            width: 50%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Single page content */
+        .page-content:not(.spread) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-content:not(.spread) img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Menu controls */
+        .menu-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .menu-nav-btn {
+            background-color: var(--pink);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(208, 79, 156, 0.3);
+        }
+
+        .page-info {
+            font-size: 1.2rem;
+            color: var(--brown);
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .menu-pages {
+                min-height: 400px;
+            }
+            
+            .menu-controls {
+                gap: 1rem;
+            }
+            
+            .menu-nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1575,34 +1920,167 @@
     <section class="menu" id="menu">
         <div class="container">
             <h2 class="section-title fade-in">Nuestro Menú</h2>
-            <!-- Book-style menu viewer -->
-            <div id="menuBook" class="fade-in" style="width:100%;max-width:900px;margin:0 auto;"></div>
-            <!-- Hide old menu viewer for now -->
-            <div class="menu-viewer fade-in" style="display:none;">
+            <div class="menu-container fade-in">
+                <div class="menu-pages">
+                    <!-- Cover Page -->
+                    <div class="menu-page active" id="page1">
+                        <div class="page-content">
+                            <img src="images/menu/1.jpg" alt="Menú Portada">
+                        </div>
+                    </div>
+                    <!-- Page 2-3 Spread -->
+                    <div class="menu-page" id="page2-3">
+                        <div class="page-content spread">
+                            <img src="images/menu/2.jpg" alt="Menú Página 2" class="page-left">
+                            <img src="images/menu/3.jpg" alt="Menú Página 3" class="page-right">
+                        </div>
+                    </div>
+                    <!-- Page 4-5 Spread -->
+                    <div class="menu-page" id="page4-5">
+                        <div class="page-content spread">
+                            <img src="images/menu/4.jpg" alt="Menú Página 4" class="page-left">
+                            <img src="images/menu/5.jpg" alt="Menú Página 5" class="page-right">
+                        </div>
+                    </div>
+                    <!-- Last Page -->
+                    <div class="menu-page" id="page6">
+                        <div class="page-content">
+                            <img src="images/menu/6.jpg" alt="Menú Página 6">
+                        </div>
+                    </div>
+                </div>
                 <div class="menu-controls">
-                    <button class="menu-nav-btn prev-btn" onclick="prevPage()">
+                    <button class="menu-nav-btn prev-btn" onclick="prevMenuPage()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M15 18l-6-6 6-6"/>
                         </svg>
                     </button>
-                    <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">0</span></span>
-                    <button class="menu-nav-btn next-btn" onclick="nextPage()">
+                    <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">4</span></span>
+                    <button class="menu-nav-btn next-btn" onclick="nextMenuPage()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 18l6-6-6-6"/>
                         </svg>
                     </button>
                 </div>
-                <div class="menu-pages">
-                    <div id="menuContainer"></div>
-                </div>
-                <div class="menu-zoom-controls">
-                    <button class="zoom-btn" onclick="zoomOut()">-</button>
-                    <span class="zoom-level">100%</span>
-                    <button class="zoom-btn" onclick="zoomIn()">+</button>
-                </div>
             </div>
         </div>
     </section>
+
+    <script>
+    // Menu navigation functions
+    let currentMenuPage = 1;
+    const totalMenuPages = 4; // Total number of spreads (including single pages)
+    let isAnimating = false;
+
+    function showMenuPage(pageNum) {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        // Get current and target pages
+        const currentPage = document.querySelector('.menu-page.active');
+        const targetPage = document.getElementById(
+            pageNum === 1 ? 'page1' :
+            pageNum === 2 ? 'page2-3' :
+            pageNum === 3 ? 'page4-5' : 'page6'
+        );
+
+        // Only animate if we're not on the first page load
+        if (currentPage && currentMenuPage !== 1) {
+            // Determine animation direction
+            const direction = pageNum > currentMenuPage ? 'next' : 'previous';
+
+            // Add animation classes
+            currentPage.classList.add(direction);
+            setTimeout(() => {
+                currentPage.classList.remove('active', direction);
+            }, 800);
+
+            targetPage.classList.add('active');
+            if (direction === 'next') {
+                targetPage.style.transform = 'rotateY(180deg)';
+                requestAnimationFrame(() => {
+                    targetPage.style.transform = 'rotateY(0)';
+                });
+            } else {
+                targetPage.style.transform = 'rotateY(-180deg)';
+                requestAnimationFrame(() => {
+                    targetPage.style.transform = 'rotateY(0)';
+                });
+            }
+        } else {
+            // For first page load, just show the page without animation
+            if (currentPage) {
+                currentPage.classList.remove('active');
+            }
+            targetPage.classList.add('active');
+            targetPage.style.transform = 'rotateY(0)';
+        }
+
+        // Update page counter
+        document.getElementById('currentPage').textContent = pageNum;
+        currentMenuPage = pageNum;
+
+        // Reset animation flag
+        setTimeout(() => {
+            isAnimating = false;
+        }, 800);
+    }
+
+    function nextMenuPage() {
+        if (currentMenuPage < totalMenuPages && !isAnimating) {
+            showMenuPage(currentMenuPage + 1);
+        }
+    }
+
+    function prevMenuPage() {
+        if (currentMenuPage > 1 && !isAnimating) {
+            showMenuPage(currentMenuPage - 1);
+        }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight') {
+            nextMenuPage();
+        } else if (e.key === 'ArrowLeft') {
+            prevMenuPage();
+        }
+    });
+
+    // Touch swipe handling
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.querySelector('.menu-pages').addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+    });
+
+    document.querySelector('.menu-pages').addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].clientX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeDistance = touchEndX - touchStartX;
+        const minSwipeDistance = 50;
+
+        if (Math.abs(swipeDistance) > minSwipeDistance) {
+            if (swipeDistance > 0) {
+                prevMenuPage();
+            } else {
+                nextMenuPage();
+            }
+        }
+    }
+
+    // Initialize menu on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set initial state without animation
+        const firstPage = document.getElementById('page1');
+        firstPage.style.transform = 'rotateY(0)';
+        showMenuPage(1);
+    });
+    </script>
 
     <!-- Features Section -->
     <section class="features" id="features">
@@ -1781,8 +2259,7 @@
         <div style="display: flex; gap: 1rem;">
             <a href="https://wa.me/573014682741" target="_blank" class="floating-button whatsapp" data-tooltip="¡Escríbenos por WhatsApp!">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-                </svg>
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
             </a>
             <button class="floating-button location" data-tooltip="Ver ubicación" onclick="scrollToMap()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
